@@ -22,28 +22,47 @@ function MyForm() {
         } else if (!REGEX.email.test(form.email)) {
             errors.email = "Invalid email address";
         }
-        if (!form.password) {
-            errors.password = "Required";
+        if (!form.phone) {
+            errors.phone = "Required";
+        }
+
+        if (!form.name) {
+            errors.name = "Required";
         }
 
         return errors;
     }
 
     function handleSubmit() {
-        alert("Login successfully!");
+        setTimeout(() => {
+            alert("Add contact successfully!");
+        }, 0);
     }
 
     return (
         <div>
-            <h1>Login</h1>
+            <h1>Contact form</h1>
             <Formik
                 initialValues={form}
                 validate={handleValidate}
                 onSubmit={handleSubmit}
-                validateOnBlur={false}
             >
                 {({ errors, handleSubmit }) => (
                     <form onSubmit={handleSubmit}>
+                        <div
+                            className={`custom-input ${
+                                errors.name ? "custom-input-error" : ""
+                            }`}
+                        >
+                            <label htmlFor="name">Name</label>
+                            <input
+                                type="text"
+                                name="name"
+                                value={form.name || ""}
+                                onChange={handleChange}
+                            />
+                            <p className="error">{errors.name}</p>
+                        </div>
                         <div
                             className={`custom-input ${
                                 errors.email ? "custom-input-error" : ""
@@ -60,17 +79,25 @@ function MyForm() {
                         </div>
                         <div
                             className={`custom-input ${
-                                errors.password ? "custom-input-error" : ""
+                                errors.phone ? "custom-input-error" : ""
                             }`}
                         >
-                            <label>Password</label>
+                            <label>Phone</label>
                             <input
-                                type="password"
-                                name="password"
-                                value={form.password || ""}
+                                type="text"
+                                name="phone"
+                                value={form.phone || ""}
                                 onChange={handleChange}
                             />
-                            <p className="error">{errors.password}</p>
+                            <p className="error">{errors.phone}</p>
+                        </div>
+                        <div className="custom-input">
+                            <label htmlFor="message">Message</label>
+                            <textarea
+                                name="message"
+                                value={form.message || ""}
+                                onChange={handleChange}
+                            ></textarea>
                         </div>
                         <button type="submit">Submit</button>
                     </form>
