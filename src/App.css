@@ -1,5 +1,14 @@
+.container {
+    width: 50%;
+    margin: auto;
+}
+
 label {
     display: block;
+}
+
+input {
+    width: 100%;
 }
 
 .custom-input {
@@ -18,4 +27,29 @@ label {
 .error {
     color: red;
     margin: 0;
+}
+
+.width-auto {
+    width: auto;
+}
+
+.flex {
+    display: flex;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
 }

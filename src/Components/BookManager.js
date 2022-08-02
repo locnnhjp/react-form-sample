@@ -2,11 +2,7 @@ import { useState } from "react";
 import { Formik } from "formik";
 
 function BookManager() {
-    const REGEX = {
-        email: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-    };
-
-    const [book, setBook] = useState({});
+    const [books, setBooks] = useState([]);
     const [form, setForm] = useState({});
     const [indexSelected, setIndexSelected] = useState(-1);
 
@@ -25,20 +21,39 @@ function BookManager() {
 
         if (!form.number) {
             errors.number = "Required";
+        } else if (isNaN(form.number)) {
+            errors.number = "Must input numbers";
         }
 
         return errors;
     }
 
+    function handleSelect(book, indexSelected) {
+        setForm(book);
+        setIndexSelected(indexSelected);
+    }
+
+    function handleDelete(index) {
+        let newBooks = JSON.parse(JSON.stringify(books));
+        newBooks.splice(index, 1);
+        setBooks(newBooks);
+    }
+
     function handleSubmit() {
-        setTimeout(() => {
-            alert("Add contact successfully!");
-        }, 0);
+        let newBooks = JSON.parse(JSON.stringify(books));
+        if (indexSelected > -1) {
+            newBooks.splice(indexSelected, 1, form);
+        } else {
+            newBooks.push(form);
+        }
+        setBooks(newBooks);
+        setForm({});
+        setIndexSelected(-1);
     }
 
     return (
-        <div>
-            <h1>Contact form</h1>
+        <div className="container">
+            <h1>Library</h1>
             <Formik
                 initialValues={form}
                 validate={handleValidate}
@@ -48,58 +63,64 @@ function BookManager() {
                     <form onSubmit={handleSubmit}>
                         <div
                             className={`custom-input ${
-                                errors.name ? "custom-input-error" : ""
+                                errors.title ? "custom-input-error" : ""
                             }`}
                         >
-                            <label htmlFor="name">Name</label>
+                            <label htmlFor="title">Title</label>
                             <input
                                 type="text"
-                                name="name"
-                                value={form.name || ""}
+                                name="title"
+                                value={form.title || ""}
                                 onChange={handleChange}
                             />
-                            <p className="error">{errors.name}</p>
+                            <p className="error">{errors.title}</p>
                         </div>
                         <div
                             className={`custom-input ${
-                                errors.email ? "custom-input-error" : ""
+                                errors.number ? "custom-input-error" : ""
                             }`}
                         >
-                            <label>Email</label>
-                            <input
-                                type="email"
-                                name="email"
-                                value={form.email || ""}
-                                onChange={handleChange}
-                            />
-                            <p className="error">{errors.email}</p>
-                        </div>
-                        <div
-                            className={`custom-input ${
-                                errors.phone ? "custom-input-error" : ""
-                            }`}
-                        >
-                            <label>Phone</label>
+                            <label>Number</label>
                             <input
                                 type="text"
-                                name="phone"
-                                value={form.phone || ""}
+                                name="number"
+                                value={form.number || ""}
                                 onChange={handleChange}
                             />
-                            <p className="error">{errors.phone}</p>
+                            <p className="error">{errors.number}</p>
                         </div>
-                        <div className="custom-input">
-                            <label htmlFor="message">Message</label>
-                            <textarea
-                                name="message"
-                                value={form.message || ""}
-                                onChange={handleChange}
-                            ></textarea>
-                        </div>
+
                         <button type="submit">Submit</button>
                     </form>
                 )}
             </Formik>
+            {books.length > 0 ? (
+                <table>
+                    <tr>
+                        <th>Title</th>
+                        <th>Number</th>
+                        <th>Actions</th>
+                    </tr>
+                    {books.map((book, index) => (
+                        <tr key={index}>
+                            <td>{book.title}</td>
+                            <td>{book.number}</td>
+                            <td>
+                                <button
+                                    onClick={() => handleSelect(book, index)}
+                                >
+                                    Edit
+                                </button>
+                                <button onClick={() => handleDelete(index)}>
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </table>
+            ) : (
+                <p style={{ textAlign: "center" }}>No data</p>
+            )}
         </div>
     );
 }
