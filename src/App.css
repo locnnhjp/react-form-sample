@@ -3,7 +3,7 @@ label {
 }
 
 .custom-input {
-    padding-bottom: 2%;
+    padding-bottom: 1%;
 }
 
 .custom-input-error label {
@@ -11,6 +11,11 @@ label {
 }
 
 .custom-input-error input {
+    border: 2px solid red;
+    border-radius: 4px;
+}
+
+.custom-input-error textarea {
     border: 2px solid red;
     border-radius: 4px;
 }
